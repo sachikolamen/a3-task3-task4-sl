@@ -1,0 +1,81 @@
+---
+title: "Naples Reef (2010) Purple Urchins"
+author: "Sachiko Lamen"
+date: "10/28/2021"
+output: 
+  html_document:
+    theme: spacelab
+    toc: yes
+    code_folding: hide
+---
+This document wrangles and visualizes data gathered by Santa Barbara Coastal Long Term Ecological Research program divers for Naples Reef purple urchins in 2010. Exploratory histograms and QQ plots were created to compare two treatments, `CONTROL`, and `ANNUAL`. 
+
+**Citation** Reed, D. 2020. SBC LTER: Reef: Long-term experiment: Kelp removal: Urchin size frequency distribution ver 20. Environmental Data Initiative. https://doi.org/10.6073/pasta/5a1e9ef03aa47bd2225c0bb98a02a63b. 
+
+```{r setup, nclude = TRUE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message= FALSE, warning = FALSE)
+library(tidyverse)
+library(here)
+library(janitor)
+library(lubridate)
+library(kableExtra)
+```
+
+## Read in/Wrangle Data
+Create dataset that only includes Naples Reef (NAPL) observations for purple urchins in 2010. First 6 lines shown for reference.
+```{r}
+urchins_2010 <- read_csv(here("data", "urchins.csv")) %>% #read in data
+  clean_names() %>% # convert column titles to lower_snake
+  mutate(date = myd(date)) %>% # convert date to "Date" class
+  mutate(year = year(date)) %>% # add new column with only year
+  filter(year == "2010", common_name == "Purple Urchin", site == "NAPL") # filter data table to only include observations for purple urchins at `NAPL` in 2010
+
+head(urchins_2010)
+  
+```
+## Exploratory Histograms/QQ plots
+
+```{r}
+# Histogram 1
+ggplot(data = urchins_2010, aes(x = size, fill = site)) +
+  geom_histogram(aes(bins = 10)) +
+  facet_wrap(~ treatment)
+
+```
+
+#### `ANNUAL` treatment does not appear to be normally distributed as it is skewed to the left. The `CONTROL` treatment is also slightly skewed to the left but looks more likely to be normally distributed. It the average size of the urchins in the `ANNUAL` treatment looks to be slightly smaller than the average size of the urchins from the `CONTROL` treatment.
+
+
+```{r}
+# QQ Plot
+ggplot(data = urchins_2010, aes(sample = size)) +
+  geom_qq() +
+  facet_wrap(~ treatment)
+```
+
+#### The QQ-plot for the `ANNUAL` treatment looks curved indicating a non-normal distribution. The QQ-plot for the `CONTROL` treatment looks linear, indicating normal distribution.
+
+## Summary Table
+```{r}
+urchins_summary <- urchins_2010 %>%
+  group_by(treatment) %>%
+  summarize(mean_size = mean(size, na.rm = TRUE),
+            median_2010 = median(size, na.rm = TRUE),
+            std_dev = sd(size, na.rm = TRUE),
+            sample_size = n())
+
+urchins_summary %>%
+  kable(col.names = c("Treatment",
+                      "Mean Size (cm)",
+                      "Median (cm)",
+                      "Standard Deviation",
+                      "Sample Size"),
+          caption = "pewp") %>%
+  kable_styling(full_width = FALSE)
+  
+```
+
+
+
+
+
