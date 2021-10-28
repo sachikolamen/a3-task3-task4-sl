@@ -19,7 +19,7 @@ This document wrangles and visualizes data for red and purple urchins recorded b
 
 **Citation:** Reed, D. 2020. SBC LTER: Reef: Long-term experiment: Kelp removal: Urchin size frequency distribution ver 20. Environmental Data Initiative. <https://doi.org/10.6073/pasta/5a1e9ef03aa47bd2225c0bb98a02a63b>.
 
-### Read in/clean data
+### Read in/clean data 
 
 First 6 lines are shown for reference
 
