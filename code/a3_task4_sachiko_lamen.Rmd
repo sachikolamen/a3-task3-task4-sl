@@ -70,12 +70,11 @@ urchins_summary %>%
                       "Median (cm)",
                       "Standard Deviation",
                       "Sample Size"),
-          caption = "pewp") %>%
+          caption = "**Table 1. Treatment Specific Size Statistics for Purple Urchins (Naples Reef, 2010).** Data was collected from Naples Reef (NAPL) for two treatments: CONTROL (n = 112) treatments left giant kelp intact, ANNUAL (n = 135) treatments removed giant kelp each winter. Urchin size was measured using diameter (cm)") %>%
   kable_styling(full_width = FALSE)
-  
+
+
 ```
-
-
 
 
 
